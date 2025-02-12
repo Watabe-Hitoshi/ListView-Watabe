@@ -48,6 +48,7 @@ struct FirstView: View {
                 .onMove { from, to in
                     replaceRow(from, to)
                 }
+                .onDelete(perform: removeRow)
             }
             .navigationTitle("Task List") // 画面上のタイトル
             
@@ -63,6 +64,12 @@ struct FirstView: View {
         tasksArray.move(fromOffsets: from, toOffset: to) // 配列内での並び替え
         if let encodedArray = try? JSONEncoder().encode(tasksArray) {
             tasksData = encodedArray // エンコードできたらAppStorageに渡す(保存・更新)
+        }
+    }
+    func removeRow(offsets: IndexSet) {
+        tasksArray.remove(atOffsets: offsets)
+        if let encodedArray = try? JSONEncoder().encode(tasksArray) {
+            tasksData = encodedArray
         }
     }
 }
