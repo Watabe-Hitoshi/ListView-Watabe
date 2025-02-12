@@ -19,7 +19,7 @@ struct ExampleTask {
 }
 
 // カスタマイズされた構造体 Task を定義
-// エンコードとデコード可能なように Codable に準拠
+// エンコードとデコード可能なようにCodableに準拠
 struct Task: Codable, Identifiable {
     var id = UUID() // ユニーク(一意)なIDを自動で生成
     var taskItem: String

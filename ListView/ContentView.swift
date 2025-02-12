@@ -5,9 +5,6 @@
 //  Created by hitoshi on 2025/02/09.
 //
 
-//
-//
-
 import SwiftUI
 
 struct ContentView: View {
@@ -17,7 +14,7 @@ struct ContentView: View {
     }
 }
 
-// リストの画面を新しい構造体に書き出す(ほぼコピー&ペースト)
+// リストのビュー
 struct FirstView: View {
     @AppStorage("TasksData") private var tasksData = Data()
     @State var tasksArray: [Task] = []
@@ -40,7 +37,7 @@ struct FirstView: View {
             }
             List {
                 
-                // ExampleTask の中の taskList を List の内側に ForEachを使って全て表示
+                // ExampleTaskの中のtaskListをListの内側にForEachを使って全て表示
                 ForEach(tasksArray) {task in
                     Text(task.taskItem)
                 }
@@ -61,27 +58,30 @@ struct FirstView: View {
     
     // 並び替え処理と並び替え後の保存
     func replaceRow(_ from: IndexSet, _ to: Int) {
-        tasksArray.move(fromOffsets: from, toOffset: to) // 配列内での並び替え
-        if let encodedArray = try? JSONEncoder().encode(tasksArray) {
-            UserDefaults.standard.setValue(encodedArray, forKey: "TasksData")
+        var array = tasksArray
+        array.move(fromOffsets: from, toOffset: to) // 配列内での並び替え
+        if let encodedArray = try? JSONEncoder().encode(array) {
             tasksData = encodedArray // エンコードできたらAppStorageに渡す(保存・更新)
+            tasksArray = array
         }
     }
     func removeRow(offsets: IndexSet) {
-        tasksArray.remove(atOffsets: offsets)
-        if let encodedArray = try? JSONEncoder().encode(tasksArray) {
-            UserDefaults.standard.setValue(encodedArray, forKey: "TasksData")
+        var array = tasksArray
+        array.remove(atOffsets: offsets)
+        if let encodedArray = try? JSONEncoder().encode(array) {
             tasksData = encodedArray
+            tasksArray = array
         }
     }
 }
 
+// タスク追加画面用の構造体
 struct SecondView: View {
     
     @Environment(\.dismiss) private var dismiss
     //テキストフィールドに入力された文字を格納する変数
     @State private var task: String = ""
-    
+    // タスクの配列
     @Binding var tasksArray: [Task]
     
     var body: some View {
@@ -101,7 +101,7 @@ struct SecondView: View {
         .tint(.orange)
         .padding()
         
-        Spacer()
+        Spacer() // スペースを埋める
     }
     
     // タスクの追加と保存 引数は入力されたタスクの文字
@@ -121,6 +121,7 @@ struct SecondView: View {
         }
     }
 }
+
 #Preview {
     ContentView()
 }
@@ -128,4 +129,3 @@ struct SecondView: View {
 //#Preview("Second View") {
 //    SecondView()
 //}
-//コミットできない
