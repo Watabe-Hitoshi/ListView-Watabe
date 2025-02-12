@@ -63,12 +63,14 @@ struct FirstView: View {
     func replaceRow(_ from: IndexSet, _ to: Int) {
         tasksArray.move(fromOffsets: from, toOffset: to) // 配列内での並び替え
         if let encodedArray = try? JSONEncoder().encode(tasksArray) {
+            UserDefaults.standard.setValue(encodedArray, forKey: "TasksData")
             tasksData = encodedArray // エンコードできたらAppStorageに渡す(保存・更新)
         }
     }
     func removeRow(offsets: IndexSet) {
         tasksArray.remove(atOffsets: offsets)
         if let encodedArray = try? JSONEncoder().encode(tasksArray) {
+            UserDefaults.standard.setValue(encodedArray, forKey: "TasksData")
             tasksData = encodedArray
         }
     }
